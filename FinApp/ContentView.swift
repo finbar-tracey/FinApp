@@ -1,24 +1,16 @@
-//
-//  ContentView.swift
-//  FinApp
-//
-//  Created by Finbar Tracey on 10/11/2025.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
+        TabView {
+            WorkoutsView()
+                .tabItem { Label("Workouts", systemImage: "list.bullet") }
 
-#Preview {
-    ContentView()
+            GoalsView()
+                .tabItem { Label("Goals", systemImage: "target") }
+
+            TimerView()
+                .tabItem { Label("Timer", systemImage: "timer") }
+        }
+    }
 }
