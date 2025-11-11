@@ -28,5 +28,13 @@ I am starting this project with Zero Swift knowledge and a lot of googling and C
 - [X] Stopwatch / Rest timer
 - [ ] Progress Tracking
 - [ ] UI / Logo
+- [X] Connect to HealthKit
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- ROADMAP -->
+## Versions
+
+V1.2 - Added HealthKit integration </br>
+V1.1 - Adding a Timer with haptics and beep </br>
+V1.0 - Ablity to add workouts and Goals
