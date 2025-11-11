@@ -1,10 +1,21 @@
 import SwiftUI
 
 struct ContentView: View {
+    // Inherit the shared objects injected by FinAppApp
+    @EnvironmentObject var store: WorkoutStore
+    @EnvironmentObject var health: HealthStore
+    @EnvironmentObject var hk: HealthKitManager
+
     var body: some View {
         TabView {
+            DashboardView()
+                .tabItem { Label("Dashboard", systemImage: "house") }
+
             WorkoutsView()
-                .tabItem { Label("Workouts", systemImage: "list.bullet") }
+                .tabItem { Label("Workouts", systemImage: "dumbbell") }
+
+            HealthView()
+                .tabItem { Label("Health", systemImage: "heart.text.square") }
 
             GoalsView()
                 .tabItem { Label("Goals", systemImage: "target") }

@@ -1,26 +1,39 @@
 import Foundation
-import SwiftUI
 import Combine
 
 final class WorkoutStore: ObservableObject {
-    @Published private(set) var workouts: [Workout] = [] {
-        didSet { save() }
-    }
+    @Published private(set) var workouts: [Workout] = []
 
     private let key = "workouts"
-    private var cancellables = Set<AnyCancellable>()
 
-    init() { load() }
+    init() { load(); sort() }
 
+    // MARK: - CRUD
     func add(_ workout: Workout) {
         workouts.insert(workout, at: 0)
+        sort()
+        save()
+    }
+
+    func update(_ workout: Workout) {
+        if let i = workouts.firstIndex(where: { $0.id == workout.id }) {
+            workouts[i] = workout
+            sort()
+            save()
+        }
     }
 
     func delete(at offsets: IndexSet) {
-        workouts.remove(atOffsets: offsets)
+        for o in offsets.sorted(by: >) { workouts.remove(at: o) }
+        save()
     }
 
-    // MARK: - Persistence (UserDefaults JSON)
+    // MARK: - Helpers
+    private func sort() {
+        workouts.sort { $0.date > $1.date }
+    }
+
+    // MARK: - Persistence
     private func save() {
         do {
             let data = try JSONEncoder().encode(workouts)
@@ -36,6 +49,7 @@ final class WorkoutStore: ObservableObject {
             workouts = try JSONDecoder().decode([Workout].self, from: data)
         } catch {
             print("Failed to load workouts: \(error)")
+            workouts = []
         }
     }
 }

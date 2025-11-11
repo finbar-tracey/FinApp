@@ -1,28 +1,29 @@
 import SwiftUI
 
 struct GoalsView: View {
-    // Super simple placeholder using @AppStorage (UserDefaults under the hood)
     @AppStorage("weeklyWorkoutsTarget") private var weeklyWorkoutsTarget: Int = 3
     @AppStorage("benchGoalKg") private var benchGoalKg: Int = 80
+    @AppStorage("useImperial") private var useImperial = false
 
     var body: some View {
-        Form {
-            Section("Weekly Target") {
-                Stepper(value: $weeklyWorkoutsTarget, in: 1...14) {
-                    Text("\(weeklyWorkoutsTarget) workouts / week")
+        NavigationStack {
+            Form {
+                Section("Weekly Target") {
+                    Stepper(value: $weeklyWorkoutsTarget, in: 1...14) {
+                        Text("\(weeklyWorkoutsTarget) workouts / week")
+                    }
+                }
+                Section("Strength Goals") {
+                    Stepper(value: $benchGoalKg, in: 20...300, step: 5) {
+                        Text("Bench: \(benchGoalKg) kg")
+                    }
+                }
+                Section("Units") {
+                    Toggle("Use lbs (instead of kg)", isOn: $useImperial)
                 }
             }
-            Section("Strength Goals") {
-                Stepper(value: $benchGoalKg, in: 20...300, step: 5) {
-                    Text("Bench: \(benchGoalKg) kg")
-                }
-            }
-            Section {
-                Text("Progress summary appears here as you log workouts.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
+            .navigationTitle("Goals")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationTitle("Goals")
     }
 }
