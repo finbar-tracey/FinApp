@@ -26,10 +26,10 @@ It’s designed as a simple, personal fitness companion to make tracking your wo
 
 ## 🧑‍💻 Current Features  
 
-- Add workouts with name, reps, weight, and category  
+- Add workouts with multple exercises & reps & sets 
 - Set and view workout goals  
 - Rest timer with haptic feedback and sound  
-- Integration with Apple Health  
+- Integration with Apple Health - View RHR, Sleep data and Steps
 
 ---
 
@@ -54,7 +54,7 @@ It’s designed as a simple, personal fitness companion to make tracking your wo
 ---
 
 ## Versions
-
+v1.3 - Fixed Sleep Tracking, Added settings screen, Improved workout screen </br>
 V1.2 - Added HealthKit integration </br>
 V1.1 - Adding a Timer with haptics and beep </br>
 V1.0 - Ablity to add workouts and Goals
