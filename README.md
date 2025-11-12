@@ -43,6 +43,13 @@ It’s designed as a simple, personal fitness companion to make tracking your wo
 - [ ] Progress Tracking
 - [ ] UI / Logo
 - [X] Connect to HealthKit
+- [ ] Apple Watch Integration
+- [ ] Widgets integration
+- [ ] Streaks
+- [ ] Achivements / Trophy case
+- [ ] Better workout/ exercise tracking - Categories, supersets, suggestions, Images
+- [ ] 'Coach Mode'
+- [ ] AI features - Auto Generate workouts, Analyze health trends, chatbot, feedback? 
 
 ---
 
