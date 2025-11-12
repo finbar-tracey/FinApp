@@ -1,25 +1,39 @@
 <a id="readme-top"></a>
 
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-<h3 align="center">Gym Tracker</h3>
-</div>
+# 💪 Health Tracker  
 
+A small project to finally tick *“Create an app”* off my bucket list.  
+I started this with **zero Swift knowledge**, a lot of **Googling** and **ChatGPT**, hoping that by the end I’ll be the opposite.  
 
+---
 
+## 🧭 About the Project  
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+**Health Tracker** helps you log workouts, track your goals, and connect with Apple Health to get a complete picture of your fitness journey.  
+It’s designed as a simple, personal fitness companion to make tracking your workouts easy and motivating.  
 
-This is a small project to finally tick the 'Create an app' off my bucket list.
-I am starting this project with Zero Swift knowledge and a lot of googling and ChatGPT, hoping by the end Ill be the opposite.
+---
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## ⚙️ Tech Stack  
 
+- **Language:** Swift  
+- **Framework:** SwiftUI  
+- **Database:** UserDefaults *(future: Core Data or CloudKit)*  
+- **APIs:** Apple HealthKit  
+- **IDE:** Xcode  
 
-<!-- ROADMAP -->
-## Roadmap
+---
+
+## 🧑‍💻 Current Features  
+
+- Add workouts with name, reps, weight, and category  
+- Set and view workout goals  
+- Rest timer with haptic feedback and sound  
+- Integration with Apple Health  
+
+---
+
+## 🛣️ Roadmap  
 
 - [X] Ablity to track exercises
 - [ ] Edit and delete exercises
@@ -30,11 +44,17 @@ I am starting this project with Zero Swift knowledge and a lot of googling and C
 - [ ] UI / Logo
 - [X] Connect to HealthKit
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+---
 
-<!-- ROADMAP -->
 ## Versions
 
 V1.2 - Added HealthKit integration </br>
 V1.1 - Adding a Timer with haptics and beep </br>
 V1.0 - Ablity to add workouts and Goals
+
+[Back to top ↑](#-health-tracker)
+
+---
+
+
+
