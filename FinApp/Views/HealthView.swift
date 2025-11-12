@@ -1,9 +1,3 @@
-//
-//  HealthView.swift
-//  FinApp
-//
-//  Created by Finbar Tracey on 11/11/2025.
-//
 import SwiftUI
 
 struct HealthView: View {
@@ -21,9 +15,9 @@ struct HealthView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("No Health Entries")
                                 .font(.headline)
-                            Text("Tap + to log weight, sleep, heart rate, water, or BP.")
+                            Text("Tap + to log weight, sleep, heart rate, water, blood pressure, or steps.")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                         .padding(.vertical, 6)
                     }
@@ -54,9 +48,7 @@ struct HealthView: View {
                 }
             }
             .sheet(isPresented: $showingAdd) { AddHealthEntryView().environmentObject(health) }
-            .sheet(item: $editing) { e in
-                AddHealthEntryView(existing: e).environmentObject(health)
-            }
+            .sheet(item: $editing) { e in AddHealthEntryView(existing: e).environmentObject(health) }
         }
     }
 
@@ -72,24 +64,37 @@ struct HealthView: View {
                 if let w = e.weightKg {
                     Text(displayWeight(w))
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
             HStack(spacing: 12) {
-                if let bf = e.bodyFatPercent { Label("\(Int(round(bf)))%", systemImage: "percent") }
-                if let r = e.restingHeartRate { Label("\(r) bpm", systemImage: "heart.fill") }
-                if let s = e.sleepHours { Label("\(String(format: "%.1f", s)) h", systemImage: "bed.double") }
-                if let w = e.waterLitres { Label("\(String(format: "%.1f", w)) L", systemImage: "drop.fill") }
-                if let s = e.systolicBP, let d = e.diastolicBP { Label("\(s)/\(d)", systemImage: "waveform.path.ecg") }
-                if let s = e.steps { Label("\(s) steps", systemImage: "figure.walk") }
-
+                if let bf = e.bodyFatPercent {
+                    Label("\(Int(round(bf)))%", systemImage: "percent")
+                }
+                if let r = e.restingHeartRate {
+                    Label("\(r) bpm", systemImage: "heart.fill")
+                }
+                if let s = e.sleepHours {
+                    Label("\(formatSleep(s))", systemImage: "bed.double")
+                }
+                if let w = e.waterLitres {
+                    Label("\(String(format: "%.1f", w)) L", systemImage: "drop.fill")
+                }
+                if let s = e.systolicBP, let d = e.diastolicBP {
+                    Label("\(s)/\(d)", systemImage: "waveform.path.ecg")
+                }
+                if let steps = e.steps {
+                    Label("\(steps) steps", systemImage: "figure.walk")
+                }
             }
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
         }
         .padding(.vertical, 6)
     }
+
+    // MARK: - Helpers
 
     private func displayWeight(_ kg: Double) -> String {
         if useImperial {
@@ -97,5 +102,13 @@ struct HealthView: View {
             return "\(Int(round(lbs))) lb"
         }
         return "\(String(format: "%.1f", kg)) kg"
+    }
+
+    /// Display sleep as "7 h 14 min"
+    private func formatSleep(_ hours: Double) -> String {
+        let totalMins = Int(round(hours * 60))
+        let h = totalMins / 60
+        let m = totalMins % 60
+        return m == 0 ? "\(h) h" : "\(h) h \(m) min"
     }
 }

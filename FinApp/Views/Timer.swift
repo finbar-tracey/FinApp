@@ -1,3 +1,8 @@
+//
+//  TimerView.swift
+//  FinApp
+//
+
 import SwiftUI
 import UIKit
 
@@ -10,8 +15,9 @@ struct TimerView: View {
     // 3-2-1 animation
     @State private var pulse = false
 
-    // User preference for sounds
+    // Read user preferences from Settings
     @AppStorage("enableBeeps") private var enableBeeps = true
+    @AppStorage("enableHaptics") private var enableHaptics = true
 
     var body: some View {
         VStack(spacing: 24) {
@@ -43,8 +49,16 @@ struct TimerView: View {
                         if !isRunning { remaining = newValue }
                     }
 
-                // Beeps toggle
-                Toggle("Countdown beeps (3-2-1 & finish)", isOn: $enableBeeps)
+                // Settings moved to SettingsView
+                HStack {
+                    Image(systemName: enableBeeps ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                    Text(enableBeeps ? "Beeps: On" : "Beeps: Off")
+                    Spacer()
+                    Image(systemName: enableHaptics ? "waveform.path" : "waveform")
+                    Text(enableHaptics ? "Haptics: On" : "Haptics: Off")
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             }
             .padding(.horizontal)
 
@@ -81,8 +95,10 @@ struct TimerView: View {
 
                 // Light haptic + pulse animation + beep for last 3 seconds
                 if remaining <= 3 && remaining > 0 {
-                    let gen = UIImpactFeedbackGenerator(style: .light)
-                    gen.impactOccurred()
+                    if enableHaptics {
+                        let gen = UIImpactFeedbackGenerator(style: .light)
+                        gen.impactOccurred()
+                    }
                     if enableBeeps { Sound.beep(.tick) }
                     withAnimation { pulse.toggle() }
                 }
@@ -91,8 +107,10 @@ struct TimerView: View {
                 isRunning = false
 
                 // Success haptic + finish beep
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.success)
+                if enableHaptics {
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                }
                 if enableBeeps { Sound.beep(.done) }
             }
         }
@@ -113,6 +131,7 @@ struct TimerView: View {
     // MARK: - Helpers
 
     private func lightTap() {
+        guard enableHaptics else { return }
         let gen = UIImpactFeedbackGenerator(style: .medium)
         gen.impactOccurred()
     }

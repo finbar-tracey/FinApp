@@ -1,55 +1,94 @@
 import Foundation
 import Combine
 
+// Legacy single-exercise Workout (for migration)
+struct LegacyWorkout: Identifiable, Codable, Equatable {
+    let id: UUID
+    var name: String
+    var weight: Double
+    var reps: Int
+    var category: String
+    var durationMinutes: Int?
+    var date: Date
+}
+
 final class WorkoutStore: ObservableObject {
-    @Published private(set) var workouts: [Workout] = []
+    @Published private(set) var sessions: [WorkoutSession] = []
 
-    private let key = "workouts"
+    private let keyV2 = "workout_sessions_v2" // new key
+    private let legacyKey = "workouts"        // old key
 
-    init() { load(); sort() }
+    init() {
+        load()
+        sort()
+    }
 
     // MARK: - CRUD
-    func add(_ workout: Workout) {
-        workouts.insert(workout, at: 0)
+    func add(_ session: WorkoutSession) {
+        sessions.insert(session, at: 0)
         sort()
         save()
     }
 
-    func update(_ workout: Workout) {
-        if let i = workouts.firstIndex(where: { $0.id == workout.id }) {
-            workouts[i] = workout
+    func update(_ session: WorkoutSession) {
+        if let i = sessions.firstIndex(where: { $0.id == session.id }) {
+            sessions[i] = session
             sort()
             save()
         }
     }
 
     func delete(at offsets: IndexSet) {
-        for o in offsets.sorted(by: >) { workouts.remove(at: o) }
+        for o in offsets.sorted(by: >) { sessions.remove(at: o) }
         save()
     }
 
     // MARK: - Helpers
     private func sort() {
-        workouts.sort { $0.date > $1.date }
+        sessions.sort { $0.date > $1.date }
     }
 
     // MARK: - Persistence
     private func save() {
         do {
-            let data = try JSONEncoder().encode(workouts)
-            UserDefaults.standard.set(data, forKey: key)
+            let data = try JSONEncoder().encode(sessions)
+            UserDefaults.standard.set(data, forKey: keyV2)
         } catch {
-            print("Failed to save workouts: \(error)")
+            print("Failed to save sessions: \(error)")
         }
     }
 
     private func load() {
-        guard let data = UserDefaults.standard.data(forKey: key) else { return }
-        do {
-            workouts = try JSONDecoder().decode([Workout].self, from: data)
-        } catch {
-            print("Failed to load workouts: \(error)")
-            workouts = []
+        let ud = UserDefaults.standard
+        if let data = ud.data(forKey: keyV2) {
+            do {
+                sessions = try JSONDecoder().decode([WorkoutSession].self, from: data)
+                return
+            } catch {
+                print("Failed to load sessions v2: \(error)")
+                sessions = []
+            }
         }
+
+        // Try migrate legacy workouts -> sessions
+        if let legacyData = ud.data(forKey: legacyKey) {
+            do {
+                let legacy = try JSONDecoder().decode([LegacyWorkout].self, from: legacyData)
+                sessions = legacy.map { w in
+                    let set = ExerciseSet(weight: w.weight, reps: w.reps)
+                    let ex = Exercise(name: w.name, category: w.category, sets: [set])
+                    return WorkoutSession(title: w.name,
+                                          date: w.date,
+                                          durationMinutes: w.durationMinutes, // may be nil
+                                          exercises: [ex])
+                }
+                save() // write to new key
+                return
+            } catch {
+                print("No legacy migration performed: \(error)")
+            }
+        }
+
+        sessions = []
     }
 }
