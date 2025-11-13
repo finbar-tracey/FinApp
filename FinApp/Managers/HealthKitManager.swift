@@ -299,6 +299,17 @@ final class HealthKitManager: ObservableObject {
                 e.steps = stepsCount
                 healthStore.add(e)
             }
+            
+            let safeSteps = stepsCount ?? 0
+            let safeSleep = sleepH ?? 0
+
+            WidgetDataSync.save(
+                steps: safeSteps,
+                sleepHours: safeSleep,
+                restingHR: rhr,
+                weight: weightKg
+            )
+            
             completion(nil)
         }
     }

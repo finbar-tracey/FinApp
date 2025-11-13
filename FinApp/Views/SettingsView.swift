@@ -16,20 +16,28 @@ enum SleepSourcePreference: String, CaseIterable, Identifiable {
 }
 
 struct SettingsView: View {
-    // Units (used across app)
+    // Env
+    @EnvironmentObject var hk: HealthKitManager
+    @EnvironmentObject var store: WorkoutStore
+    @EnvironmentObject var health: HealthStore
+
+    // Units (global)
     @AppStorage("useImperial") private var useImperial = false
 
     // Sleep
     @AppStorage("sleepSourcePreferenceRaw") private var sleepSourcePreferenceRaw: String = SleepSourcePreference.auto.rawValue
     @AppStorage("customSleepBundleId") private var customSleepBundleId: String = "" // advanced users
     @State private var detectedPreferred: String? = nil
-    @EnvironmentObject var hk: HealthKitManager
 
-    // Timer preferences (moved from TimerView)
+    // Timer prefs
     @AppStorage("enableBeeps") private var enableBeeps = true
     @AppStorage("enableHaptics") private var enableHaptics = true
 
-    @Environment(\.dismiss) private var dismiss
+    // Optional display name (for initials)
+    @AppStorage("profileName") private var profileName: String = "You"
+
+    // Sync UI
+    @State private var syncing = false
 
     private var sleepPreference: SleepSourcePreference {
         SleepSourcePreference.allCases.first(where: { $0.rawValue == sleepSourcePreferenceRaw }) ?? .auto
@@ -38,6 +46,30 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                // MARK: - Profile summary card
+                Section {
+                    ProfileSummaryView(
+                        name: profileName,
+                        useImperial: useImperial,
+                        workoutsThisWeek: workoutsThisWeek(),
+                        stepsThisWeek: stepsThisWeek(),
+                        latestWeightText: latestWeightText(),
+                        latestRHRText: latestRHRText(),
+                        lastSyncText: lastSyncText(),
+                        syncing: syncing,
+                        onSync: {
+                            syncing = true
+                            hk.syncToday(into: health) { _ in syncing = false }
+                        }
+                    )
+                }
+
+                // MARK: Profile
+                Section("Profile") {
+                    TextField("Display name", text: $profileName, prompt: Text("Your name"))
+                        .textInputAutocapitalization(.words)
+                }
+
                 // MARK: Units
                 Section("Units") {
                     Toggle("Use imperial (lb, mi)", isOn: $useImperial)
@@ -110,16 +142,62 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Close") { dismiss() }
-                }
-            }
             .onAppear {
                 hk.detectPreferredSleepSourceBundleId { bid in
                     detectedPreferred = bid ?? "None"
                 }
             }
         }
+    }
+
+    // MARK: - Computed stats for the profile card
+
+    private var cal: Calendar { .current }
+    private var startOfWeek: Date {
+        cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) ?? cal.startOfDay(for: Date())
+    }
+
+    private func workoutsThisWeek() -> Int {
+        store.sessions.filter { $0.date >= startOfWeek }.count
+    }
+
+    private func stepsThisWeek() -> Int {
+        health.entries
+            .filter { $0.date >= startOfWeek }
+            .compactMap { $0.steps }
+            .reduce(0, +)
+    }
+
+    private func latestWeightText() -> String {
+        // most recent entry with weight
+        guard let w = health.entries
+            .sorted(by: { $0.date > $1.date })
+            .compactMap({ $0.weightKg })
+            .first else { return "—" }
+
+        if useImperial {
+            let lbs = w * 2.2046226218
+            return "\(Int(round(lbs))) lb"
+        } else {
+            return String(format: "%.1f kg", w)
+        }
+    }
+
+    private func latestRHRText() -> String {
+        if let r = health.entries
+            .sorted(by: { $0.date > $1.date })
+            .compactMap({ $0.restingHeartRate })
+            .first {
+            return "\(r) bpm"
+        }
+        return "—"
+    }
+
+    private func lastSyncText() -> String {
+        guard let last = health.entries.map(\.date).max() else { return "—" }
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .short
+        return df.string(from: last)
     }
 }

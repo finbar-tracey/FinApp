@@ -6,14 +6,67 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		828A2B422EC65393004A05F2 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 828A2B412EC65393004A05F2 /* WidgetKit.framework */; };
+		828A2B442EC65393004A05F2 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 828A2B432EC65393004A05F2 /* SwiftUI.framework */; };
+		828A2B552EC65394004A05F2 /* FinAppWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 828A2B3F2EC65393004A05F2 /* FinAppWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		828A2B532EC65394004A05F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 826F97F62EC2968F00BE3709 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 828A2B3E2EC65393004A05F2;
+			remoteInfo = FinAppWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		828A2B5A2EC65394004A05F2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				828A2B552EC65394004A05F2 /* FinAppWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		826F97FE2EC2968F00BE3709 /* FinApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		828A2B3F2EC65393004A05F2 /* FinAppWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinAppWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		828A2B412EC65393004A05F2 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		828A2B432EC65393004A05F2 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		828A2B5B2EC6540D004A05F2 /* FinAppWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinAppWidgetExtension.entitlements; sourceTree = "<group>"; };
+		828A2B612EC67988004A05F2 /* FinAppWidgetExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinAppWidgetExtensionRelease.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		828A2B562EC65394004A05F2 /* Exceptions for "FinAppWidget" folder in "FinAppWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 828A2B3E2EC65393004A05F2 /* FinAppWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		826F98002EC2968F00BE3709 /* FinApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FinApp;
+			sourceTree = "<group>";
+		};
+		828A2B452EC65393004A05F2 /* FinAppWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				828A2B562EC65394004A05F2 /* Exceptions for "FinAppWidget" folder in "FinAppWidgetExtension" target */,
+			);
+			path = FinAppWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,13 +79,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		828A2B3C2EC65393004A05F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				828A2B442EC65393004A05F2 /* SwiftUI.framework in Frameworks */,
+				828A2B422EC65393004A05F2 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		826F97F52EC2968F00BE3709 = {
 			isa = PBXGroup;
 			children = (
+				828A2B612EC67988004A05F2 /* FinAppWidgetExtensionRelease.entitlements */,
+				828A2B5B2EC6540D004A05F2 /* FinAppWidgetExtension.entitlements */,
 				826F98002EC2968F00BE3709 /* FinApp */,
+				828A2B452EC65393004A05F2 /* FinAppWidget */,
+				828A2B402EC65393004A05F2 /* Frameworks */,
 				826F97FF2EC2968F00BE3709 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,8 +107,18 @@
 			isa = PBXGroup;
 			children = (
 				826F97FE2EC2968F00BE3709 /* FinApp.app */,
+				828A2B3F2EC65393004A05F2 /* FinAppWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		828A2B402EC65393004A05F2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				828A2B412EC65393004A05F2 /* WidgetKit.framework */,
+				828A2B432EC65393004A05F2 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -55,10 +131,12 @@
 				826F97FA2EC2968F00BE3709 /* Sources */,
 				826F97FB2EC2968F00BE3709 /* Frameworks */,
 				826F97FC2EC2968F00BE3709 /* Resources */,
+				828A2B5A2EC65394004A05F2 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				828A2B542EC65394004A05F2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				826F98002EC2968F00BE3709 /* FinApp */,
@@ -69,6 +147,28 @@
 			productName = FinApp;
 			productReference = 826F97FE2EC2968F00BE3709 /* FinApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		828A2B3E2EC65393004A05F2 /* FinAppWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 828A2B572EC65394004A05F2 /* Build configuration list for PBXNativeTarget "FinAppWidgetExtension" */;
+			buildPhases = (
+				828A2B3B2EC65393004A05F2 /* Sources */,
+				828A2B3C2EC65393004A05F2 /* Frameworks */,
+				828A2B3D2EC65393004A05F2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				828A2B452EC65393004A05F2 /* FinAppWidget */,
+			);
+			name = FinAppWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = FinAppWidgetExtension;
+			productReference = 828A2B3F2EC65393004A05F2 /* FinAppWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +181,9 @@
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					826F97FD2EC2968F00BE3709 = {
+						CreatedOnToolsVersion = 26.1;
+					};
+					828A2B3E2EC65393004A05F2 = {
 						CreatedOnToolsVersion = 26.1;
 					};
 				};
@@ -100,12 +203,20 @@
 			projectRoot = "";
 			targets = (
 				826F97FD2EC2968F00BE3709 /* FinApp */,
+				828A2B3E2EC65393004A05F2 /* FinAppWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		826F97FC2EC2968F00BE3709 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		828A2B3D2EC65393004A05F2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +233,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		828A2B3B2EC65393004A05F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		828A2B542EC65394004A05F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 828A2B3E2EC65393004A05F2 /* FinAppWidgetExtension */;
+			targetProxy = 828A2B532EC65394004A05F2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		826F98072EC2969000BE3709 /* Debug */ = {
@@ -288,7 +414,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = FinApp/FinApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = FinApp/FinAppRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R4CNRLU7KW;
@@ -320,6 +446,68 @@
 			};
 			name = Release;
 		};
+		828A2B582EC65394004A05F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = FinAppWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R4CNRLU7KW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinAppWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FinAppWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Findows.FinApp.FinAppWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		828A2B592EC65394004A05F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = FinAppWidgetExtensionRelease.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R4CNRLU7KW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinAppWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FinAppWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Findows.FinApp.FinAppWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -337,6 +525,15 @@
 			buildConfigurations = (
 				826F980A2EC2969000BE3709 /* Debug */,
 				826F980B2EC2969000BE3709 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		828A2B572EC65394004A05F2 /* Build configuration list for PBXNativeTarget "FinAppWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				828A2B582EC65394004A05F2 /* Debug */,
+				828A2B592EC65394004A05F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
