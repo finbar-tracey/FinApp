@@ -44,7 +44,7 @@ It’s designed as a simple, personal fitness companion to make tracking your wo
 - [ ] UI / Logo
 - [X] Connect to HealthKit
 - [ ] Apple Watch Integration
-- [ ] Widgets integration
+- [X] Widgets integration
 - [ ] Streaks
 - [ ] Achivements / Trophy case
 - [ ] Better workout/ exercise tracking - Categories, supersets, suggestions, Images
@@ -54,6 +54,7 @@ It’s designed as a simple, personal fitness companion to make tracking your wo
 ---
 
 ## Versions
+v1.4 - Basic Widget
 v1.3 - Fixed Sleep Tracking, Added settings screen, Improved workout screen </br>
 V1.2 - Added HealthKit integration </br>
 V1.1 - Adding a Timer with haptics and beep </br>
