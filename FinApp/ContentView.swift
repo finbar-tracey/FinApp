@@ -16,12 +16,21 @@ struct ContentView: View {
 
             HealthView()
                 .tabItem { Label("Health", systemImage: "heart.text.square") }
+            
+            CardioView()
+                .tabItem { Label("Cardio", systemImage: "figure.run") }
 
             GoalsView()
                 .tabItem { Label("Goals", systemImage: "target") }
 
             TimerView()
                 .tabItem { Label("Timer", systemImage: "timer") }
+            
+            TrendsView()
+                .tabItem { Label("Trends", systemImage: "chart.bar.xaxis") }
+            
+            ExerciseLibraryView()
+                .tabItem { Label("Exercises", systemImage: "list.bullet.rectangle") }
         }
     }
 }

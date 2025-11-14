@@ -11,6 +11,25 @@ struct LegacyWorkout: Identifiable, Codable, Equatable {
     var durationMinutes: Int?
     var date: Date
 }
+extension WorkoutStore {
+    func duplicate(_ session: WorkoutSession) {
+        let copy = WorkoutSession(
+            id: UUID(),
+            title: session.title,
+            date: Date(),   // new session = today
+            durationMinutes: session.durationMinutes,
+            notes: session.notes,
+            exercises: session.exercises
+        )
+
+        // If your sessions is private(set), this still works because
+        // you’re mutating inside the type.
+        sessions.insert(copy, at: 0)
+
+        // If you have a persistence method (e.g. save()), call it here.
+        save()
+    }
+}
 
 final class WorkoutStore: ObservableObject {
     @Published private(set) var sessions: [WorkoutSession] = []
@@ -42,6 +61,8 @@ final class WorkoutStore: ObservableObject {
         for o in offsets.sorted(by: >) { sessions.remove(at: o) }
         save()
     }
+    
+    
 
     // MARK: - Helpers
     private func sort() {

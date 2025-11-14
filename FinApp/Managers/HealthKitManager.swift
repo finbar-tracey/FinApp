@@ -47,7 +47,7 @@ final class HealthKitManager: ObservableObject {
 
     func requestAuthorization(completion: @escaping (Bool) -> Void) {
         let toShare: Set<HKSampleType> = [] // read-only for now
-        let toRead:  Set<HKObjectType> = [weightType, restingHRType, sleepType, stepType]
+        let toRead:  Set<HKObjectType> = [weightType, restingHRType, sleepType, stepType, HKObjectType.workoutType() ]
 
         store.requestAuthorization(toShare: toShare, read: toRead) { [weak self] success, _ in
             DispatchQueue.main.async {
@@ -394,6 +394,122 @@ final class HealthKitManager: ObservableObject {
         let start = cal.date(byAdding: .day, value: -1, to: todayNoon)!  // yesterday noon
         let end = todayNoon                                              // today noon
         return (start, end)
+    }
+    
+    // Map HealthKit workout activity type → our CardioType
+    private func cardioType(for workoutType: HKWorkoutActivityType) -> CardioType? {
+        switch workoutType {
+        case .running:
+            return .run
+        case .walking, .hiking:
+            return .walk
+        case .cycling:
+            return .cycle
+        case .rowing:
+            return .row
+        default:
+            return .other
+        }
+    }
+    
+    func importRecentCardioWorkouts(
+        into cardioStore: CardioStore,
+        daysBack: Int = 30,
+        completion: @escaping (Int) -> Void
+    ) {
+        guard isAuthorized else {
+            completion(0)
+            return
+        }
+
+        let calendar = Calendar.current
+        let now = Date()
+        let start = calendar.date(byAdding: .day, value: -daysBack, to: now) ?? now.addingTimeInterval(-30 * 24 * 3600)
+
+        let predicate = HKQuery.predicateForSamples(
+            withStart: start,
+            end: now,
+            options: [.strictStartDate]
+        )
+
+        let sort = NSSortDescriptor(
+            key: HKSampleSortIdentifierStartDate,
+            ascending: true
+        )
+
+        let query = HKSampleQuery(
+            sampleType: HKObjectType.workoutType(),
+            predicate: predicate,
+            limit: HKObjectQueryNoLimit,
+            sortDescriptors: [sort]
+        ) { [weak self] _, samples, error in
+            guard let self = self else { return }
+
+            guard error == nil, let workouts = samples as? [HKWorkout] else {
+                DispatchQueue.main.async { completion(0) }
+                return
+            }
+
+            let allowedTypes: Set<HKWorkoutActivityType> = [
+                .running,
+                .walking,
+                .hiking,
+                .cycling,
+                .rowing
+            ]
+
+            let filtered = workouts.filter { allowedTypes.contains($0.workoutActivityType) }
+
+            DispatchQueue.main.async {
+                let existing = cardioStore.entries
+                var newCount = 0
+
+                for w in filtered {
+                    guard let cardioType = self.cardioType(for: w.workoutActivityType) else { continue }
+
+                    let distanceMeters = w.totalDistance?.doubleValue(for: HKUnit.meter()) ?? 0
+                    let distanceKm = distanceMeters > 0 ? distanceMeters / 1000.0 : nil
+
+                    let durationMinutes = Int(round(w.duration / 60.0))
+                    if (distanceKm ?? 0) <= 0 && durationMinutes <= 0 {
+                        continue
+                    }
+
+                    let startDate = w.startDate
+
+                    // Dedup check: same start time (±60s), same duration, same distance ±50m
+                    let isDuplicate = existing.contains { entry in
+                        let sameDate = abs(entry.date.timeIntervalSince(startDate)) < 60
+                        let sameDuration = entry.durationMinutes == durationMinutes
+                        let dist1 = entry.distanceKm ?? 0
+                        let dist2 = distanceKm ?? 0
+                        let sameDistance = abs(dist1 - dist2) < 0.05 // 50m tolerance
+                        return sameDate && sameDuration && sameDistance
+                    }
+
+                    if isDuplicate {
+                        continue
+                    }
+
+                    let newEntry = CardioEntry(
+                        id: UUID(),
+                        type: cardioType,
+                        date: startDate,
+                        distanceKm: distanceKm,
+                        durationMinutes: durationMinutes,
+                        avgHeartRate: nil,
+                        notes: nil
+                    )
+
+                    cardioStore.add(newEntry)
+                    newCount += 1
+                }
+
+                completion(newCount)
+            }
+        }
+
+        store.execute(query)
     }
 
     // MARK: - Debug

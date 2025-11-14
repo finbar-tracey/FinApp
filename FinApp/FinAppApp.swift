@@ -13,6 +13,8 @@ struct FinAppApp: App {
     @StateObject private var store  = WorkoutStore()
     @StateObject private var health = HealthStore()
     @StateObject private var hk     = HealthKitManager()
+    @StateObject private var exerciseLibrary = ExerciseLibraryStore()
+    @StateObject private var cardio = CardioStore()
 
     var body: some Scene {
         WindowGroup {
@@ -20,6 +22,8 @@ struct FinAppApp: App {
                 .environmentObject(store)
                 .environmentObject(health)
                 .environmentObject(hk)
+                .environmentObject(exerciseLibrary)
+                .environmentObject(cardio)
         }
     }
 }
